@@ -1,0 +1,1 @@
+import "./globals.css"; export const metadata={title:"Vocabulary Ereke",description:"Learn, practise and use new English words"}; export default function RootLayout({children}){return <html lang="en"><body>{children}</body></html>}
