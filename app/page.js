@@ -1,0 +1,18 @@
+"use client";
+import {useState} from "react";
+const words=[
+["sibling","brother or sister","брат или сестра"],["relative","a person in your family","родственник"],["supportive","giving help and encouragement","поддерживающий"],["nephew","a son of your brother or sister","племянник"],["niece","a daughter of your brother or sister","племянница"],["trust","to believe someone is honest","доверять"]
+];
+export default function Home(){
+ const [tab,setTab]=useState("learn"),[i,setI]=useState(0),[answer,setAnswer]=useState(""),[score,setScore]=useState(0),[writing,setWriting]=useState(""),[submitted,setSubmitted]=useState(false);
+ const check=()=>{if(answer.trim().toLowerCase()===words[i][0])setScore(s=>s+1);setAnswer("");setI(x=>(x+1)%words.length)};
+ const used=words.filter(w=>writing.toLowerCase().includes(w[0]));
+ return <main><header><div><b>Vocabulary<span>Ereke</span></b><small>Learn • Practise • Use</small></div><div className="avatar">ST</div></header>
+ <section className="hero"><p>UNIT 2 • FAMILY & FRIENDS</p><h1>Turn new words into<br/><em>your words.</em></h1><div className="progress"><span style={{width:tab==="learn"?"33%":tab==="practice"?"66%":"100%"}}/></div></section>
+ <nav>{["learn","practice","write","teacher"].map(x=><button className={tab===x?"active":""} onClick={()=>setTab(x)}>{x==="write"?"Use words":x}</button>)}</nav>
+ {tab==="learn"&&<section className="card"><div className="count">{i+1} / {words.length}</div><div className="word">{words[i][0]}</div><div className="meaning">{words[i][1]}</div><div className="translation">{words[i][2]}</div><p className="example">“My {words[i][0]} is one of the most important people in my life.”</p><button className="primary" onClick={()=>setI((i+1)%words.length)}>I know this word →</button></section>}
+ {tab==="practice"&&<section className="card"><div className="eyebrow">SPELL THE WORD</div><h2>{words[i][1]}</h2><p className="translation">{words[i][2]}</p><input value={answer} onChange={e=>setAnswer(e.target.value)} placeholder="Type the English word..." onKeyDown={e=>e.key==="Enter"&&check()}/><button className="primary" onClick={check}>Check answer</button><p className="score">Score: {score} correct</p></section>}
+ {tab==="write"&&<section className="card writing"><div className="eyebrow">MAKE THE WORDS YOURS</div><h2>Write 2–3 sentences</h2><p>Use at least <b>3 target words</b>. Write about your family or someone close to you.</p><div className="chips">{words.map(w=><span className={used.includes(w)?"used":""}>{w[0]} {used.includes(w)?"✓":""}</span>)}</div><textarea value={writing} onChange={e=>{setWriting(e.target.value);setSubmitted(false)}} placeholder="My sibling is..."/><div className="writingfoot"><span>{used.length}/3 target words</span><button className="primary" disabled={used.length<3||writing.length<25} onClick={()=>setSubmitted(true)}>Submit writing</button></div>{submitted&&<div className="feedback"><b>Feedback ready ✓</b><p>Good use of target vocabulary. Now check your verb forms and add one reason or example to make your ideas clearer. Your teacher can see this submission.</p></div>}</section>}
+ {tab==="teacher"&&<section className="card"><div className="eyebrow">TEACHER DASHBOARD</div><h2>Class progress</h2><div className="stats"><div><b>24</b><span>Students</span></div><div><b>81%</b><span>Avg. practice</span></div><div><b>18</b><span>Submitted</span></div></div><table><tbody>{[["Islam","92%","Submitted"],["Adilkhan","84%","Submitted"],["Arman","73%","Not yet"],["Danial","95%","Submitted"]].map(r=><tr>{r.map(c=><td>{c}</td>)}</tr>)}</tbody></table><p className="note">Prototype dashboard. The next version will connect accounts and persistent student submissions to a database.</p></section>}
+ </main>
+}
